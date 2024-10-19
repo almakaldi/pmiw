@@ -1,0 +1,103 @@
+//https://youtu.be/risYM8gp_Yo
+//Alma Kaldi, comisión 4, legajo 120328/0
+let anchoPantalla = 640;
+let altoPantalla = 480;
+let cantF = 23;
+let pantallas = [];
+let estado = 1;
+let miFuente ;
+let avion;
+let titulo;
+let musicaDeFondo;
+let texto = [];
+let decisiones = [];
+let sonidoReproducido = false;
+
+function preload() {
+   for (let i = 0; i < cantF; i++){
+     pantallas[i] = loadImage("data/porco" + i + ".jpg");
+   }
+   miFuente = loadFont('data/inter.ttf');
+   titulo = loadImage("data/porcorosso.png");
+   avion = loadImage("data/avion.png");
+   soundFormats('mp3');
+   musicaDeFondo = loadSound('data/musicadefondo.mp3');
+   texto = loadStrings('data/textos.txt');
+  decisiones[3] = ['    Rechazar \n   el llamado', '  Aceptar e intentar \n   salvar a las niñas'];
+  decisiones[5] = ['   Rechazar \n la propuesta', '           Aceptar \n      la propuesta'];
+  decisiones[8] = ['  Buscar otra \n   alternativa', ' Confiar en Fio para \nreparar el hidroavión'];
+  decisiones[11] = ['  Rechazar el\n      desafío', '  Aceptar el desafío \n   y pelear por Fio'];
+  decisiones[16] = ['  Casarse con \n        Gina', ' Negar y despedirse \n         de Gina'];
+} 
+
+function setup() {
+   createCanvas(anchoPantalla, altoPantalla);
+   background(0);
+   print(pantallas);
+   textFont(miFuente);
+   textSize(20);
+   print(avion);
+   print(titulo);
+   musicaDeFondo.loop();
+}
+
+function draw() {
+   background(0);
+   misPantallas(); 
+   pantallaDosBotones();
+   pInicio();
+   botonInicio();
+  pantallaUnBoton();
+   textos();
+   pCreditos();
+   reiniciar();
+   textoAlt();
+}
+function detectarBoton(x, y, an, al) {
+  return mouseX > x && mouseX < x+an && mouseY > y && mouseY < y+al;
+} 
+
+function mousePressed() { 
+  if (estado === 1 && detectarBoton (250,250,150,40)){
+  estado++; // para inicar
+  } else if (estado >cantF && detectarBoton (250, 250, 150, 40)){
+    estado = 1; // para reiniciar
+  } else if (estado === 3 && detectarBoton (85,400, 150,60)){
+    estado = 19;
+  } else if (estado === 19 && detectarBoton (435,420, 120,30)){
+    estado = 5;
+  } else if (estado === 5 && detectarBoton (85,400, 150,60)){
+    estado = 20;
+  } else if (estado === 20 && (435,420, 120,30)){ //final
+    estado = 25;
+  } else if (estado === 8 && detectarBoton (85,400, 150,60)) {
+  estado = 21;
+  } else if (estado === 21 && detectarBoton (435,420, 120,30)){
+    estado = 11;
+  } else if (estado === 18 && (435,420, 120,30)){ //final
+    estado = 24;
+  } else if (estado === 22 && (435,420, 120,30)){ // final
+    estado = 24;
+  } else if (estado === 11 && detectarBoton (85,400, 150,60)){
+    estado = 23;
+  } else if (estado === 16 && detectarBoton (85,400, 150,60)){
+    estado = 22;
+  } else if (estado === 23 && detectarBoton (435,420, 120,30)){
+    estado = 17;
+  } else if (pantallaUnBoton && detectarBoton ( 435,420, 120,30)){ 
+    estado++; // botón siguiente
+  }
+}
+// CONTROL DEL SONIDO
+function keyPressed() {
+  if (key === 'A' || key === 'a') {
+     if (!sonidoReproducido) {
+      musicaDeFondo.play(); 
+      sonidoReproducido = true; 
+    }
+  }
+  if (key === 'S' || key === 's') {
+    musicaDeFondo.stop();
+     sonidoReproducido = false; 
+  }
+}
